@@ -1,0 +1,107 @@
+*histcase.jax*	case-insensitive なコマンドライン履歴検索を可能にしたりする
+
+書いた人  : obcat <obcat@icloud.com>
+ライセンス: MIT License
+要件      : Vim ?.?.???? かそれ以降のバージョン
+
+==============================================================================
+目次						*histcase-contents*
+
+はじめに		|histcase-introduction|
+変数			|histcase-variables|
+キーマッピング		|histcase-key-mappings|
+
+
+==============================================================================
+はじめに					*histcase-introduction*
+
+*histcase* は case-insensitive なコマンドライン履歴検索 (|c_<Up>|, |c_<Down>|)
+を可能にしたりするプラグインです。
+
+機能を有効にするには以下の設定を vimrc に書きます:
+>
+	cmap <Up>     <Plug>(histcase-Up)
+	cmap <Down>   <Plug>(histcase-Down)
+	cmap <S-Up>   <Plug>(histcase-S-Up)
+	cmap <S-Down> <Plug>(histcase-S-Down)
+	cmap <C-p>    <Plug>(histcase-C-p)
+	cmap <C-n>    <Plug>(histcase-C-n)
+<
+必要に応じて |g:histcase| などの変数も設定してください。
+
+動作例~
+Ex コマンドの履歴が以下のとおりになっていると仮定します:
+>
+	#  cmd history
+	1  edit foo.txt
+	2  MyWrite
+	3  quit
+<
+`:my<Up>` とタイプすると、コマンドラインは `:MyWrite` になります。組み込みの
+|c_<Up>| とは異なり、大文字小文字の違いが無視されました。これはうれしいですね!
+
+
+==============================================================================
+変数						*histcase-variables*
+
+g:histcase					*g:histcase*
+	|<Plug>(histcase-Up)| / |<Plug>(histcase-Down)| でコマンドライン履歴を
+	検索する際に大文字小文字をどのように取り扱うかを設定する辞書です。キー
+	にはコマンドラインの種類を表す文字 |cmdwin-char| を指定し、値にはその
+	コマンドラインに対する設定を表す文字列を指定します。有効な文字列とその
+	意味については 'tagcase' を参照してください。デフォルト:
+>
+		let g:histcase = {
+		      \   ':': 'followscs',
+		      \   '>': 'followscs',
+		      \   '/': 'match',
+		      \   '?': 'match',
+		      \   '=': 'followscs',
+		      \   '@': 'followscs',
+		      \   '-': 'match',
+		      \ }
+<
+
+==============================================================================
+キーマッピング					*histcase-key-mappings*
+
+このプラグインには、コマンドラインモードで利用可能な以下の六つの <Plug> マッピ
+ングが含まれています。
+
+<Plug>(histcase-Up)				*<Plug>(histcase-Up)*
+<Plug>(histcase-Down)				*<Plug>(histcase-Down)*
+	それぞれ |c_<Up>|, |c_<Down>| と同様ですが、コマンドライン履歴検索の際
+	の大文字小文字の扱い方を変数 |g:histcase| で変更できるようになっていま
+	す。
+
+	BUG: wildmenu モードでファイル/メニュー名を補完しているとき、|c_<Up>|
+	を押すと親ディレクトリ/メニューに移動することができますが ('wildmenu'
+	を参照)、<Plug>(histcase-Up) ではできません。常にコマンドライン履歴を
+	検索する機能が働いてしまいます。<Plug>(histcase-Down) も同様です。
+
+<Plug>(histcase-S-Up)				*<Plug>(histcase-S-Up)*
+<Plug>(histcase-S-Down)				*<Plug>(histcase-S-Down)*
+	それぞれ |c_<S-Up>|, |c_<S-Down>| と同様です。
+
+<Plug>(histcase-C-p)				*<Plug>(histcase-C-p)*
+<Plug>(histcase-C-n)				*<Plug>(histcase-C-n)*
+	それぞれ |c_CTRL-P|, |c_CTRL-N| と同様です。
+
+	BUG: 'wildchar' で複数のマッチが得られたとき、|c_CTRL-P| を押すと前の
+	マッチに移動することができますが、<Plug>(histcase-C-p) ではできません。
+	常に一つ古いコマンドラインを履歴から呼び出す機能が働いてしまいます。
+	<Plug>(histcase-C-n) も同様です。
+
+NOTE: 以上の <Plug> マッピングと組み込みの |c_<Up>|, |c_<Down>|, |c_<S-Up>|,
+|c_<S-Down>|, |c_CTRL-P|, |c_CTRL-N| を併用しないようにしてください。たとえば
+>
+	cmap <Up>   <Plug>(histcase-Up)
+	cmap <Down> <Plug>(histcase-Down)
+<
+の二つだけを設定し、<S-Up> は何にもマップしていない状態で
+/<Up><Up><Down><S-Up> とタイプすると、<S-Up> を押したときの結果が期待と異なる
+ものになってしまいます。
+
+
+=============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:
