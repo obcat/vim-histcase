@@ -1,6 +1,12 @@
 " Maintainer: obcat <obcat@icloud.com>
 " License:    MIT License
 
+if exists('g:loaded_histcase')
+  finish
+endif
+let g:loaded_histcase = v:true
+
+
 if !exists('g:histcase')
   let g:histcase = {}
 endif
