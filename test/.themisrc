@@ -17,6 +17,7 @@ function SetHistory(histname, entries)
 endfunction
 
 " TODO: cmdtype == '>' is not supported.
+" TODO: Does not work well in GitHub action when cmdtype == '@', why?
 function HistTest(cmdtype, entries, key_expect_set)
   let histname = s:cmdtype2histname[a:cmdtype]
   let enterkey = s:cmdtype2enterkey[a:cmdtype]

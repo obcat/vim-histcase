@@ -79,7 +79,7 @@ endfunction
 
 
 function s:suite.stop_at_bottom()
-  call HistTest('@', ['foo', 'bar', 'baz'], [
+  call HistTest('=', ['foo', 'bar', 'baz'], [
         \ ["fo",      {'cmdline': 'fo', 'cmdpos': 3}, '#1-1'],
         \ ["\<Down>", {'cmdline': 'fo', 'cmdpos': 3}, '#1-2'],
         \ ])
