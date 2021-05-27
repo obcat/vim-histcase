@@ -109,14 +109,14 @@ endfunction
 
 
 let s:cmdtype2histname = {
-  \   ':': 'cmd',
-  \   '/': 'search',
-  \   '?': 'search',
-  \   '=': 'expr',
-  \   '@': 'input',
-  \   '>': 'debug',
-  \   '-': '',
-  \ }
+      \   ':': 'cmd',
+      \   '/': 'search',
+      \   '?': 'search',
+      \   '=': 'expr',
+      \   '@': 'input',
+      \   '>': 'debug',
+      \   '-': '',
+      \ }
 
 function s:cmdtype2history(cmdtype) abort
   if a:cmdtype == '-'
