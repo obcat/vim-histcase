@@ -1,0 +1,63 @@
+call themis#log('-----------------------------------------------------------')
+call themis#log((execute('version')->split("\n"))[: 2]->join("\n"))
+call themis#log('-----------------------------------------------------------')
+
+call themis#option('recursive', 1)
+call themis#option('reporter', 'spec')
+
+
+let g:assert = themis#helper('assert')
+
+
+function SetHistory(histname, entries)
+  call histdel(a:histname)
+  for entry in a:entries
+    call histadd(a:histname, entry)
+  endfor
+endfunction
+
+" TODO: cmdtype == '>' is not supported.
+function HistTest(cmdtype, entries, key_expect_set)
+  let histname = s:cmdtype2histname[a:cmdtype]
+  let enterkey = s:cmdtype2enterkey[a:cmdtype]
+  let exitkey = "\<Esc>\<Esc>"
+  for i in range(len(a:key_expect_set))
+    call SetHistory(histname, a:entries)
+    let keys = [enterkey]
+          \  + map(a:key_expect_set[: i], 'v:val[0]')
+          \  + ["\<Plug>(save-cmdline-info)", exitkey]
+    let keys = join(keys, '')
+    call feedkeys(keys, 'xt')
+    let expected_cmdline_info = extend(a:key_expect_set[i][1], {'cmdtype': a:cmdtype})
+    let message = a:key_expect_set[i][2]
+    call g:assert.equals(s:cmdline_info, expected_cmdline_info, message)
+  endfor
+endfunction
+
+let s:cmdtype2histname = {
+      \  ':': 'cmd',
+      \  '/': 'search',
+      \  '?': 'search',
+      \  '=': 'expr',
+      \  '@': 'input',
+      \ }
+
+let s:cmdtype2enterkey = {
+      \  ':': ":",
+      \  '/': "/",
+      \  '?': "?",
+      \  '=': ":\<C-r>=",
+      \  '@': ":call input('prompt')\<CR>",
+      \ }
+
+cnoremap <expr> <Plug>(save-cmdline-info) <SID>save_cmdline_info()
+nnoremap <expr> <Plug>(save-cmdline-info) <SID>save_cmdline_info()
+
+function s:save_cmdline_info()
+  let s:cmdline_info = {
+        \   'cmdline': getcmdline(),
+        \   'cmdpos' : getcmdpos(),
+        \   'cmdtype': getcmdtype(),
+        \ }
+  return ''
+endfunction
