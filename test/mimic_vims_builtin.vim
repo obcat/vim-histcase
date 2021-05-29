@@ -193,8 +193,8 @@ endfunction
 
 
 function s:suite.special_charactors_are_inserted_literally()
-  call HistTest('?', ["foo\<CR>"], [
-        \ ["ba",      {'cmdline': 'ba',       'cmdpos': 3}, '#1-1'],
-        \ ["\<S-Up>", {'cmdline': "foo\<CR>", 'cmdpos': 5}, '#1-2'],
+  call HistTest('?', ["foo\n"], [
+        \ ["ba",      {'cmdline': 'ba',    'cmdpos': 3}, '#1-1'],
+        \ ["\<S-Up>", {'cmdline': "foo\n", 'cmdpos': 5}, '#1-2'],
         \ ])
 endfunction
