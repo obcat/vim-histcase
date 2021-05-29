@@ -17,6 +17,7 @@ function histcase#onCmdlineEnter() abort
   let cmdline.query = 'shouldRefreshThis!'
   let cmdline.shouldRefreshQuery = v:true
   let cmdline.lastCmdpos = -1
+  let cmdline.next = '???' " an entry to be inserted
   let s:cmdlineStack += [cmdline]
 endfunction
 
@@ -86,8 +87,8 @@ function histcase#brain(key) abort
 
   let sign = a:key =~ 'Up' ? -1 : +1
   let c.histidx += sign * distance
-  let g:histcase#next = candidates[c.histidx] " this will be inserted
-  let c.lastCmdpos = len(g:histcase#next) + 1
+  let c.next = candidates[c.histidx]
+  let c.lastCmdpos = len(c.next) + 1
   let c.shouldRefreshQuery = v:false
   return 'next'
 endfunction
@@ -101,6 +102,10 @@ endfunction
 function histcase#nextPost() abort
   call s:adjustAutocmd('post')
   return ''
+endfunction
+
+function histcase#next() abort
+  return s:cmdlineStack[-1]['next']
 endfunction
 
 " phase: pre or post

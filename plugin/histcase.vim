@@ -68,7 +68,7 @@ cnoremap <expr> <SID>((next-post)) histcase#nextPost()
 cmap <SID>((next)) <SID>([next])<SID>([redraw])
 
 
-cnoremap <silent> <SID>([next]) <End><C-\>eg:histcase#next<CR>
+cnoremap <silent> <SID>([next]) <End><C-\>e histcase#next()<CR>
 " HACK: <Space><BS> can be used to redraw cmdline.  This idea is by @machakann.
 " @kuuote, @thinca, and @Milly also helped me.  Thanks all!
 cnoremap <SID>([redraw]) <Space><BS>
