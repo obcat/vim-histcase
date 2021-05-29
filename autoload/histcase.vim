@@ -151,13 +151,13 @@ endfunction
 
 function s:smartcase(ignorecase, smartcase, query) abort
   let ignorecase = a:ignorecase
-  if ignorecase && a:smartcase && s:has_upper(a:query)
+  if ignorecase && a:smartcase && s:hasUpper(a:query)
     let ignorecase = v:false
   endif
   return ignorecase
 endfunction
 
-function s:has_upper(text) abort
+function s:hasUpper(text) abort
   return a:text =~ '\u'
 endfunction
 
