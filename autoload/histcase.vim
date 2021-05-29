@@ -93,8 +93,18 @@ function histcase#brain(key) abort
 endfunction
 
 
+function histcase#nextPre() abort
+  call s:adjustAutocmd('pre')
+  return ''
+endfunction
+
+function histcase#nextPost() abort
+  call s:adjustAutocmd('post')
+  return ''
+endfunction
+
 " phase: pre or post
-function histcase#adjustAutocmd(phase) abort
+function s:adjustAutocmd(phase) abort
   augroup histcase
     autocmd!
     if a:phase == 'post'

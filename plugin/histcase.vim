@@ -63,8 +63,8 @@ cnoremap <SID>{beep} <S-Down>
 cmap <SID>{next} <SID>((next-pre))<SID>((next))<SID>((next-post))
 
 
-cnoremap <expr> <SID>((next-pre))  histcase#adjustAutocmd('pre')
-cnoremap <expr> <SID>((next-post)) histcase#adjustAutocmd('post')
+cnoremap <expr> <SID>((next-pre))  histcase#nextPre()
+cnoremap <expr> <SID>((next-post)) histcase#nextPost()
 cmap <SID>((next)) <SID>([next])<SID>([redraw])
 
 
